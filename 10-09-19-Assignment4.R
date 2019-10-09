@@ -113,3 +113,28 @@ df_DP
 colnames(df_DP)[1]="transect"
 df_DP
 
+#Using the join function (tidyverse package), combine the data 
+#frames with the mean and standard deviation to create one, new data frame that has three columns (mean density, sd density, transect)
+
+R1_df<- full_join(df_MP, df_DP, by = "transect")
+R1_df
+
+#Repeat the above steps, but this time using the tapply function 
+#to find the count of observations for each transect for 'parcel.density.m3''.
+
+CP<-fish %>% group_by(transect.id) %>%
+  summarize(parcel.density.m3 = sum(parcel.density.m3, na.rm = TRUE))
+CP
+#Another way to summarize
+AP=aggregate(x=f$parcel.density.m3, by = list(f$transect.id), FUN = sum)
+AP
+
+df_CP<-as.data.frame(CP)
+df_CP
+
+names(df_CP)[names(df_CP) == "parcel.density.m3"] <- "count"  
+df_CP
+
+colnames(df_CP)[1]="transect"
+df_CP
+
